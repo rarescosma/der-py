@@ -9,7 +9,8 @@ PYTHONS = ["3.8"]
 @nox.session(python=PYTHONS)
 def tests(session):
     args = session.posargs or ["--cov", "-m", "not e2e"]
-    # session.run("poetry", "install", external=True)
+    if not session._runner.global_config.reuse_existing_virtualenvs:
+        session.run("poetry", "install", external=True)
     session.run("pytest", "tests", *args)
 
 
