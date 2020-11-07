@@ -35,6 +35,8 @@ mypy = "^0.790"
 flake8-annotations = "^2.4.1"
 flake8-docstrings = "^1.5.0"
 xdoctest = "^0.15.0"
+sphinx = "^3.3.0"
+sphinx-autodoc-typehints = "^1.11.1"
 
 [build-system]
 requires = ["poetry>=0.12"]

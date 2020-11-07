@@ -7,7 +7,7 @@ import nox
 from nox.sessions import Session
 
 nox.options.sessions = "tests", "mypy", "lint", "safety"
-LOCATIONS = "src", "tests", "noxfile.py"
+LOCATIONS = "src", "tests", "noxfile.py", "docs/conf.py"
 PYTHONS = ["3.8"]
 
 
@@ -75,6 +75,14 @@ def xdoctest(session: Session) -> None:
     _install_package(session)
     _install_with_constraints(session, "pytest", "xdoctest")
     session.run("pytest", "src/der_py", "--xdoc", *args)
+
+
+@nox.session(python=PYTHONS)
+def docs(session: Session) -> None:
+    """Build the documentation."""
+    _install_package(session)
+    _install_with_constraints(session, "sphinx", "sphinx-autodoc-typehints")
+    session.run("sphinx-build", "docs", "docs/_build")
 
 
 def _install_package(session: Session) -> None:
