@@ -1,9 +1,9 @@
-import os
-
 import click
 import requests
 
-API_URL = "https://{language}.wikipedia.org/api/rest_v1/page/random/summary"
+API_URL: str = (
+    "https://{language}.wikipedia.org/api/rest_v1/page/random/summary"
+)
 
 
 def random_page(language: str = "en") -> dict:
@@ -12,5 +12,4 @@ def random_page(language: str = "en") -> dict:
             response.raise_for_status()
             return response.json()
     except requests.RequestException as err:
-        print(os.getcwd())
         raise click.ClickException(str(err)) from err
