@@ -16,6 +16,8 @@ derpy = "der_py.__main__:main"
 python = "^3.8"
 click = "^7.1.2"
 requests = "^2.24.0"
+desert = "^2020.1.6"
+marshmallow = "^3.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.2"

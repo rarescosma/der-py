@@ -2,7 +2,7 @@
 select = B,BLK,B9,C,E,F,I,S,W
 max-complexity = 10
 application-import-names = der_py,tests
-import-order-style = google
+import-order-style = pycharm
 
 # bugbear checks line-length sanity with a tolerance of 10%
 ignore = E501
