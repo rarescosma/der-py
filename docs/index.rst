@@ -20,7 +20,7 @@ run this command in your terminal:
 
 .. code-block:: console
 
-   $ pip install der_py
+   $ pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ der-py
 
 
 Usage
