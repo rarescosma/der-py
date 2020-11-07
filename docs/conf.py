@@ -1,5 +1,5 @@
 """Sphinx configuration."""
-project = "der.py"
+project = "der-py"
 author = "Rareș Cosma"
 copyright = f"2020, {author}"
 extensions = [

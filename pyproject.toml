@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "der.py"
+name = "der-py"
 version = "0.1.7"
 authors = ["Rareș Cosma <rares@getbetter.ro>"]
 description = "And together bind them..."
 license = "MIT"
 readme = "README.md"
 documentation = "https://der-py.readthedocs.io"
-homepage = "https://github.com/rarescosma/der.py"
-repository = "https://github.com/rarescosma/der.py"
+homepage = "https://github.com/rarescosma/der-py"
+repository = "https://github.com/rarescosma/der-py"
 keywords = ["python", "derpy", "dependency-injection", "scheduler", "clients", "utils", "toolkit"]
 
 [tool.poetry.scripts]

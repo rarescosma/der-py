@@ -18,7 +18,7 @@ from . import __version__
 )
 @click.version_option(version=__version__)
 def main(language: str) -> None:
-    """Run der.py - derpy python project."""
+    """Run der-py, run."""
     page = wiki.random_page(language=language)
 
     click.secho(page.title, fg="green")
