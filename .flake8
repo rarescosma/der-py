@@ -1,0 +1,6 @@
+[flake8]
+select = BLK,C,E,F,I,W
+max-complexity = 10
+max-line-length = 88
+application-import-names = der_py,tests
+import-order-style = google
