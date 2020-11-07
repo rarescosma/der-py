@@ -15,8 +15,7 @@ PYTHONS = ["3.8"]
 def tests(session: Session) -> None:
     """Run the test suite using pytest."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
-    if not session._runner.global_config.reuse_existing_virtualenvs:
-        session.run("poetry", "install", "--no-dev", external=True)
+    _install_package(session)
     _install_with_constraints(
         session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock"
     )
@@ -67,6 +66,20 @@ def black(session: Session) -> None:
     args = session.posargs or LOCATIONS
     _install_with_constraints(session, "black")
     session.run("black", *args)
+
+
+@nox.session(python=PYTHONS)
+def xdoctest(session: Session) -> None:
+    """Run examples with xdoctest."""
+    args = session.posargs or []
+    _install_package(session)
+    _install_with_constraints(session, "pytest", "xdoctest")
+    session.run("pytest", "src/der_py", "--xdoc", *args)
+
+
+def _install_package(session: Session) -> None:
+    if not session._runner.global_config.reuse_existing_virtualenvs:
+        session.run("poetry", "install", "--no-dev", external=True)
 
 
 def _install_with_constraints(session: Session, *args: str) -> None:

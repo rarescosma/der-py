@@ -22,7 +22,14 @@ class Page:
 
 
 def random_page(language: str = "en") -> Page:
-    """Fetch a random page from the Wikipedia API."""
+    """Fetch a random page from the Wikipedia API.
+
+    Example:
+        >>> from der_py.clients import wiki
+        >>> page = wiki.random_page(language="ro")
+        >>> bool(page.title)
+        True
+    """
     try:
         with requests.get(API_URL.format(language=language)) as response:
             response.raise_for_status()
