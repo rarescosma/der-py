@@ -1,3 +1,4 @@
+"""Nox sessions."""
 import contextlib
 from tempfile import NamedTemporaryFile
 from typing import Generator, IO
@@ -12,6 +13,7 @@ PYTHONS = ["3.8"]
 
 @nox.session(python=PYTHONS)
 def tests(session: Session) -> None:
+    """Run the test suite using pytest."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
     if not session._runner.global_config.reuse_existing_virtualenvs:
         session.run("poetry", "install", "--no-dev", external=True)
@@ -23,6 +25,7 @@ def tests(session: Session) -> None:
 
 @nox.session(python=PYTHONS)
 def mypy(session: Session) -> None:
+    """Type-check using mypy."""
     args = session.posargs or LOCATIONS
     _install_with_constraints(session, "mypy")
     session.run("mypy", *args)
@@ -30,6 +33,7 @@ def mypy(session: Session) -> None:
 
 @nox.session(python=PYTHONS)
 def lint(session: Session) -> None:
+    """Lint using flake8."""
     args = session.posargs or LOCATIONS
     _install_with_constraints(
         session,
@@ -38,6 +42,7 @@ def lint(session: Session) -> None:
         "flake8-bandit",
         "flake8-black",
         "flake8-bugbear",
+        "flake8-docstrings",
         "flake8-import-order",
     )
     session.run("flake8", *args)
@@ -45,6 +50,7 @@ def lint(session: Session) -> None:
 
 @nox.session(python=PYTHONS)
 def safety(session: Session) -> None:
+    """Scan dependencies for insecure packages."""
     _install_with_constraints(session, "safety")
     with _requirements_file(session, "--without-hashes") as requirements:
         session.run(
@@ -57,6 +63,7 @@ def safety(session: Session) -> None:
 
 @nox.session(python=PYTHONS)
 def black(session: Session) -> None:
+    """Run the black code formatter."""
     args = session.posargs or LOCATIONS
     _install_with_constraints(session, "black")
     session.run("black", *args)

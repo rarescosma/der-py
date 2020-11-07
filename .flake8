@@ -1,5 +1,5 @@
 [flake8]
-select = ANN,B,BLK,B9,C,E,F,I,S,W
+select = ANN,B,B9,BLK,C,D,E,F,I,S,W
 max-complexity = 10
 application-import-names = der_py,tests
 import-order-style = pycharm
@@ -10,4 +10,4 @@ max-line-length = 80
 
 # bandit complains about assertions (removed in byte code) in tests unless
 # and also ignoring missing type annotations in the test files
-per-file-ignores = tests/*:S101,ANN
+per-file-ignores = tests/*:S101,ANN,D

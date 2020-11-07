@@ -1,3 +1,4 @@
+"""Client for the Wikipedia REST API."""
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Type
@@ -14,11 +15,14 @@ API_URL: str = (
 
 @dataclass(frozen=True)
 class Page:
+    """Wikipedia page model."""
+
     title: str
     extract: str
 
 
 def random_page(language: str = "en") -> Page:
+    """Fetch a random page from the Wikipedia API."""
     try:
         with requests.get(API_URL.format(language=language)) as response:
             response.raise_for_status()

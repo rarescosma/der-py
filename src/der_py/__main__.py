@@ -1,4 +1,4 @@
-""" Console entrypoint. """
+"""Command-line interface."""
 import textwrap
 
 import click
@@ -18,7 +18,7 @@ from . import __version__
 )
 @click.version_option(version=__version__)
 def main(language: str) -> None:
-    """A derpy python project."""
+    """Run der.py - derpy python project."""
     page = wiki.random_page(language=language)
 
     click.secho(page.title, fg="green")
