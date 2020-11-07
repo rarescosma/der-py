@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import click
 import requests
 
@@ -6,10 +8,20 @@ API_URL: str = (
 )
 
 
-def random_page(language: str = "en") -> dict:
+@dataclass(frozen=True)
+class Page:
+    title: str
+    extract: str
+
+
+def random_page(language: str = "en") -> Page:
     try:
         with requests.get(API_URL.format(language=language)) as response:
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+            return Page(
+                title=data.get("title", ""),
+                extract=data.get("extract", ""),
+            )
     except requests.RequestException as err:
         raise click.ClickException(str(err)) from err

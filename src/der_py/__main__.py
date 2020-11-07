@@ -19,9 +19,7 @@ from . import __version__
 @click.version_option(version=__version__)
 def main(language: str) -> None:
     """A derpy python project."""
-    data = wiki.random_page(language=language)
-    title = data["title"]
-    extract = data["extract"]
+    page = wiki.random_page(language=language)
 
-    click.secho(title, fg="green")
-    click.echo(textwrap.fill(extract))
+    click.secho(page.title, fg="green")
+    click.echo(textwrap.fill(page.extract))
