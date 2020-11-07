@@ -23,6 +23,14 @@ def tests(session: Session) -> None:
 
 
 @nox.session(python=PYTHONS)
+def coverage(session: Session) -> None:
+    """Upload coverage data."""
+    _install_with_constraints(session, "coverage[toml]", "codecov")
+    session.run("coverage", "xml", "--fail-under=0")
+    session.run("codecov", *session.posargs)
+
+
+@nox.session(python=PYTHONS)
 def mypy(session: Session) -> None:
     """Type-check using mypy."""
     args = session.posargs or LOCATIONS
