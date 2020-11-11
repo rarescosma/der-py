@@ -18,3 +18,9 @@ der_py.clients.wiki
 
 .. automodule:: der_py.clients.wiki
    :members:
+
+der_py.fun.registry
+-------------------
+
+.. automodule:: der_py.fun.registry
+   :members:
