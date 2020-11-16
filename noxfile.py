@@ -14,7 +14,9 @@ PYTHONS = ["3.8"]
 @nox.session(python=PYTHONS)
 def tests(session: Session) -> None:
     """Run the test suite using pytest."""
-    args = session.posargs or ["--cov", "-m", "not e2e"]
+    m_args = ["-m", "not e2e"] if "-m" not in session.posargs else []
+    cov_args = ["--cov"]
+    args = [*m_args, *cov_args, *(session.posargs or [])]
     _install_package(session)
     _install_with_constraints(
         session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock"
