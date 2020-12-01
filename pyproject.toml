@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "der-py"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Rareș Cosma <rares@getbetter.ro>"]
 description = "And together bind them..."
 license = "MIT"
