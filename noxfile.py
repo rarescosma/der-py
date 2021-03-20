@@ -114,6 +114,7 @@ def _requirements_file(
             "poetry",
             "export",
             "--dev",
+            "--without-hashes",
             "--format=requirements.txt",
             f"--output={requirements.name}",
             *args,
