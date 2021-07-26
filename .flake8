@@ -5,7 +5,7 @@ application-import-names = der_py,tests
 import-order-style = pycharm
 
 # bugbear checks line-length sanity with a tolerance of 10%
-ignore = E501,ANN101
+ignore = E501,ANN101,ANN102
 max-line-length = 80
 
 # bandit complains about assertions (removed in byte code) in tests unless
