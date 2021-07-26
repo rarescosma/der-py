@@ -1,5 +1,7 @@
 import click.testing
 import pytest
+import requests.exceptions
+from requests_mock import ANY as ANY_URL
 
 
 def pytest_configure(config):
@@ -12,10 +14,21 @@ def runner():
 
 
 @pytest.fixture
-def mock_requests_get(mocker):
-    mock = mocker.patch("requests.get")
-    mock.return_value.__enter__.return_value.json.return_value = {
-        "title": "Lorem Ipsum",
-        "extract": "Lorem ipsum dolor sit amet",
-    }
-    return mock
+def mock_wiki_get(requests_mock):
+    return requests_mock.get(
+        ANY_URL,
+        json={
+            "title": "Lorem Ipsum",
+            "extract": "Lorem ipsum dolor sit amet",
+        },
+    )
+
+
+@pytest.fixture
+def mock_wiki_get_bad_json(requests_mock):
+    return requests_mock.get(ANY_URL, json="random")
+
+
+@pytest.fixture
+def mock_wiki_error(requests_mock):
+    return requests_mock.get(ANY_URL, exc=requests.RequestException)

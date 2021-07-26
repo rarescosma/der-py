@@ -19,7 +19,7 @@ def tests(session: Session) -> None:
     args = [*m_args, *cov_args, *(session.posargs or [])]
     _install_package(session)
     _install_with_constraints(
-        session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock"
+        session, "coverage[toml]", "pytest", "pytest-cov", "requests-mock"
     )
     session.run("pytest", "tests", *args)
 
