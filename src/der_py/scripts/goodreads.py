@@ -4,11 +4,21 @@ import json
 from dataclasses import asdict, dataclass
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Dict, Iterable, NamedTuple, Sequence
+from typing import Iterable, NamedTuple, Sequence, Tuple, TypedDict, cast
 
-from der_py.clients.goodreads import RatingFetcher, get_book_ratings
+import click
 
-Record = Dict[str, str]
+from der_py.clients.goodreads import get_book_ratings
+
+
+class _Record(TypedDict, total=False):
+    book_id: int
+    title: str
+    author: str
+    bookshelves: str
+    deviant_rating: float
+    average_rating: float
+    rating: Tuple[int, ...]
 
 
 class _Rating(NamedTuple):
@@ -21,7 +31,7 @@ class _Rating(NamedTuple):
     @property
     def deviant(self) -> float:
         """Deviant rating: five stars + one stars / three stars."""
-        divident = self.three
+        divident: float = self.three
         if self.three == 0:
             if self.four == 0 and self.two == 0:
                 return 0
@@ -47,7 +57,7 @@ class _Book:
     author: str
 
     @classmethod
-    def from_record(cls, record: Record) -> "_Book":
+    def from_record(cls, record: _Record) -> "_Book":
         return cls(
             book_id=record.get("book_id", -1),
             title=record.get("title", ""),
@@ -63,24 +73,26 @@ class _RatedBook(NamedTuple):
     def from_book(
         cls,
         book: _Book,
-        fetcher: RatingFetcher = get_book_ratings,
     ) -> "_RatedBook":
-        return cls(book=book, rating=_Rating(*fetcher(book.book_id)))
+        return cls(book=book, rating=_Rating(*get_book_ratings(book.book_id)))
 
-    def as_record(self) -> Record:
-        return {
-            **asdict(self.book),
-            "deviant_rating": f"{self.rating.deviant:0.3f}",
-            "average_rating": f"{self.rating.average:0.3f}",
-            "ratings": tuple(self.rating),
-        }
+    def as_record(self) -> _Record:
+        return cast(
+            _Record,
+            {
+                **asdict(self.book),
+                "deviant_rating": f"{self.rating.deviant:0.4f}",
+                "average_rating": f"{self.rating.average:0.4f}",
+                "ratings": tuple(self.rating),
+            },
+        )
 
 
-def _read_csv(csv_path: Path) -> Iterable[Record]:
+def _read_csv(csv_path: Path) -> Iterable[_Record]:
     with open(csv_path.as_posix(), newline="") as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
-            yield {_normalize_key(k): v for k, v in row.items()}
+            yield cast(_Record, {_normalize_key(k): v for k, v in row.items()})
 
 
 def _normalize_key(key: str) -> str:
@@ -100,11 +112,14 @@ def _process_csv_export(csv_path: Path) -> Sequence[_RatedBook]:
     return sorted(rated_books, key=lambda _: _.rating.deviant, reverse=True)
 
 
-if __name__ == "__main__":
-    deviant_sorted_books = _process_csv_export(
-        Path("/home/karelian/Downloads/goodreads_library_export.csv")
-    )
-    Path("/home/karelian/Downloads/deviant_books.json").write_text(
-        json.dumps([_.as_record() for _ in deviant_sorted_books])
-    )
-    print("done.")
+@click.command()
+@click.argument(
+    "csv_path",
+    type=click.Path(exists=True, dir_okay=False, file_okay=True),
+)
+def main(csv_path: str) -> None:
+    """Process CSV exports from Goodreads into JSON records."""
+    real_csv_path = Path(csv_path)
+
+    deviant_sorted_books = _process_csv_export(real_csv_path)
+    print(json.dumps([_.as_record() for _ in deviant_sorted_books]))
