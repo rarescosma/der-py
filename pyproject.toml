@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "der-py"
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Rareș Cosma <rares@getbetter.ro>"]
 description = "And together bind them..."
 license = "MIT"
@@ -12,6 +12,7 @@ keywords = ["python", "derpy", "dependency-injection", "scheduler", "clients", "
 
 [tool.poetry.scripts]
 derpy = "der_py.__main__:main"
+goodreads = "der_py.scripts.goodreads:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
