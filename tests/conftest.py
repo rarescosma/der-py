@@ -10,7 +10,7 @@ def pytest_configure(config):
 
 @pytest.fixture
 def runner():
-    return click.testing.CliRunner()
+    return click.testing.CliRunner(mix_stderr=False)
 
 
 @pytest.fixture
