@@ -27,7 +27,7 @@ def test_main_uses_en_wikipedia_org(runner, mock_wiki_get):
 
 def test_main_handles_request_errors(runner, mock_wiki_error):
     result = runner.invoke(__main__.main)
-    assert "Error" in result.output
+    assert "Error" in result.stderr
     assert result.exit_code == 1
 
 
