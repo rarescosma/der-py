@@ -1,5 +1,7 @@
 """Goodreads client."""
 import json
+import sys
+from contextlib import suppress
 from typing import Callable, Sequence
 
 import requests
@@ -14,7 +16,7 @@ RatingFetcher = Callable[[int], Ratings]
 
 def get_book_ratings(book_id: int) -> Ratings:
     """Fetch ratings for the given book ID."""
-    print(f"fetching book ratings for book ID: {book_id}")
+    print(f"fetching book ratings for book ID: {book_id}", file=sys.stderr)
     lines = requests.get(RATINGS_API.format(book_id=book_id)).text.splitlines()
     idxs = [
         idx for idx, line in enumerate(lines) if "renderRatingGraph(" in line
@@ -22,4 +24,7 @@ def get_book_ratings(book_id: int) -> Ratings:
     if not idxs:
         return []
 
-    return [int(_) for _ in (json.loads(lines[idxs[0] + 1].strip(" ,")))]
+    with suppress(json.JSONDecodeError):
+        return [int(_) for _ in (json.loads(lines[idxs[0] + 1].strip(" ,")))]
+
+    return []
