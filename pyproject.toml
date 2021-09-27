@@ -13,6 +13,7 @@ keywords = ["python", "derpy", "dependency-injection", "scheduler", "clients", "
 [tool.poetry.scripts]
 derpy = "der_py.__main__:main"
 goodreads = "der_py.scripts.goodreads:main"
+otk = "der_py.scripts.obsidian_toolkit:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
