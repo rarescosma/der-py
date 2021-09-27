@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import click.testing
 import pytest
 import requests.exceptions
@@ -11,6 +13,14 @@ def pytest_configure(config):
 @pytest.fixture
 def runner():
     return click.testing.CliRunner(mix_stderr=False)
+
+
+@pytest.fixture
+def mock_pool():
+    """Good for mocking multiprocessing/dummy Pool.map"""
+    _pool = MagicMock()
+    _pool.return_value.__enter__.return_value.map = map
+    return _pool
 
 
 @pytest.fixture
