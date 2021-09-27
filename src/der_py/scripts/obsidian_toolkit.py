@@ -1,4 +1,5 @@
 """Do Obsidian stuff."""
+import re
 from functools import partial
 from pathlib import Path
 from typing import Callable, Iterable, List
@@ -6,7 +7,7 @@ from typing import Callable, Iterable, List
 import click
 
 from ..fun import flatmap
-from ..obsidian import Args, Line, Note, auto_alias
+from ..obsidian import Args, Line, Note, auto_alias, use_alias
 
 
 @click.group()
@@ -36,6 +37,35 @@ def do_auto_alias(in_file: List[str], lower: bool) -> None:
             continue
         line_processor = partial(
             auto_alias.process_line, aliases=auto_alias.get_aliases(args)
+        )
+        _process_file(args, line_processor)
+
+
+@main.command("use-alias")
+@click.option(
+    "vault_dir",
+    "-V",
+    required=True,
+    type=click.Path(dir_okay=True, file_okay=False, exists=True),
+)
+@click.option(
+    "in_file",
+    "-i",
+    required=True,
+    type=click.Path(dir_okay=False, file_okay=True, exists=True),
+    multiple=True,
+)
+def do_use_alias(vault_dir: str, in_file: List[str]) -> None:
+    """Replace plain links to aliased notes with aliased links."""
+    replace_map = use_alias.vault_replace_map(Path(vault_dir))
+    pattern = re.compile("|".join(replace_map.keys()))
+
+    for f in in_file:
+        args = Args(in_file=Path(f), out_file=Path(f))
+        line_processor = partial(
+            use_alias.process_line,
+            re_pat=pattern,
+            re_map=replace_map,
         )
         _process_file(args, line_processor)
 
