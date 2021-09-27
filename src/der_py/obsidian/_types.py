@@ -49,6 +49,7 @@ class Note:
             frontmatter = ""
             while (l := next(l_iter)) != "---":
                 frontmatter += l
+                frontmatter += "\n"
             with suppress(yaml.YAMLError):
                 return yaml.safe_load(frontmatter)
 
