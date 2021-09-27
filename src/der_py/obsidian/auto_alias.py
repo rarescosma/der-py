@@ -6,13 +6,16 @@ from . import Args, Line
 
 def process_line(line: Line, aliases: List[str]) -> Iterable[str]:
     """Yield frontmatter + the rest of the file unchanged."""
+    aliases_line = f"aliases: [{', '.join(map(_wrap_alias, aliases))}]"
     if line.no == 0:
-        yield from [
-            "---",
-            f"aliases: [{', '.join(map(_wrap_alias, aliases))}]",
-            "---",
-        ]
-    yield line.text
+        if line.text.startswith("---"):  # has frontmatter already
+            yield line.text
+            yield aliases_line
+        else:  # no frontmatter, yield it all
+            yield from ["---", aliases_line, "---"]
+            yield line.text
+    else:
+        yield line.text
 
 
 def get_aliases(args: Args) -> List[str]:
