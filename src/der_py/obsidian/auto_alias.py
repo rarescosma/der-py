@@ -29,4 +29,4 @@ def get_aliases(args: Args) -> List[str]:
 
 
 def _wrap_alias(alias: str) -> str:
-    return alias if " " not in alias else f'"{alias}"'
+    return f'"{alias}"'
